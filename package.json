@@ -1,0 +1,28 @@
+{
+  "name": "pubu",
+  "version": "0.1.1",
+  "description": "pubu.im imcoming client",
+  "keywords": [
+    "pubu",
+    "pubu.im"
+  ],
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maichong/pubu.git"
+  },
+  "author": {
+    "name": "Liang",
+    "email": "liang@maichong.it",
+    "url": "https://github.com/liangxingchen"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maichong/pubu/issues"
+  },
+  "homepage": "https://github.com/maichong/pubu#readme",
+  "dependencies": {
+    "request": "*"
+  }
+}
