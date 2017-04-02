@@ -6,7 +6,8 @@
 
 'use strict';
 
-const request = require('request');
+const fetch = require('node-fetch');
+const FormData = require('form-data');
 const instances = {};
 
 /**
@@ -32,7 +33,7 @@ Pubu.getInstance = function (name) {
 Pubu.init = function (config) {
   config || (config = {});
   if (typeof config == 'string') {
-    config = {url: config};
+    config = { url: config };
   }
 
   this._url = config.url || this._url || '';
@@ -55,29 +56,32 @@ Pubu.post = function (text, atts, file) {
     }
   }
 
-  let url = this._url;
-
-  let form = {
-    text: text,
-    attachments: atts || [],
-    displayUser: this._user
-  };
+  let headers = {};
+  let body;
 
   if (file) {
-    form.file = file;
+    body = new FormData();
+    body.append('text', text);
+    body.append('attachments', atts);
+    body.append('displayUser', this._user);
+    body.append('file', file);
+  } else {
+    headers = {
+      'Content-Type': 'application/json'
+    };
+    body = JSON.stringify({
+      text: text,
+      attachments: atts || [],
+      displayUser: this._user
+    });
   }
 
-  return new Promise(function (resolve, reject) {
-    request.post({
-      url: url,
-      form: form
-    }, function (error, res, body) {
-      if (error) {
-        return reject(error);
-      }
-      let json = JSON.parse(body);
-      resolve(json);
-    });
+  return fetch(this._url, {
+    method: 'POST',
+    headers: headers,
+    body: body
+  }).then(function (res) {
+    return res.json();
   });
 };
 
@@ -89,9 +93,7 @@ Pubu.post = function (text, atts, file) {
  * @returns {Promise}
  */
 Pubu.code = function (name, code, type) {
-  let url = this._url;
-
-  let form = {
+  let body = {
     name: name,
     text: name,
     snippet: {
@@ -101,19 +103,17 @@ Pubu.code = function (name, code, type) {
     displayUser: this._user
   };
 
-  return new Promise(function (resolve, reject) {
-    request.post({
-      url: url,
-      form: form
-    }, function (error, res, body) {
-      if (error) {
-        return reject(error);
-      }
-      let json = JSON.parse(body);
-      resolve(json);
-    });
+  return fetch(this._url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }).then(function (res) {
+    return res.json();
   });
 };
 
 module.exports = Pubu.prototype = Pubu.default = Pubu;
+
 Pubu.call(Pubu);

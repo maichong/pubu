@@ -1,6 +1,6 @@
 {
   "name": "pubu",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "pubu.im imcoming client",
   "keywords": [
     "pubu",
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/maichong/pubu#readme",
   "dependencies": {
-    "request": "*"
+    "form-data": "*",
+    "node-fetch": "*"
   }
 }
